@@ -1,20 +1,31 @@
-import React , {useState} from "react";
+import React , {useState,useEffect  } from "react";
+import axios from "axios";
 
 // jsx
 const App = () => {
-  
-  const [post, setPost] = useState([{userId: 1  , id:110 , title: "nice day ", body: "aaaaaaaaaaaaa"},
-  {userId: 2  , id:111 , title: "my new car", body: "bbbbbbbbbbbbbbbb"}]);
+  //{userId: 1  , id:110 , title: "nice day ", body: "aaaaaaaaaaaaa"},
+  //{userId: 2  , id:111 , title: "my new car", body: "bbbbbbbbbbbbbbbb"}
+  const [post, setPost] = useState([]);
   const [userId, setUserId] = useState(0);
   const [id, setId] = useState(0);
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
-//{userId:userId,id:id,title:title,body:body}
 
-  const userPost = post.map((elem,i)=>{
-  return (
-    <p key={i}>title: {elem.title}</p>
-  )
+
+useEffect(() => {
+  axios.get("https://jsonplaceholder.typicode.com/posts").then(result=>{
+    setPost(result.data)
+
+  })
+
+},[])
+
+const userPost = post.map((elem,i)=>{
+  return (<>
+  <p>id :{elem.id}</p>
+    <p key={i}>title: {elem.title} </p>
+    <p key={i+"body"}>body: {elem.body} </p>
+    </>)
 });
 
 
@@ -36,7 +47,9 @@ const App = () => {
       <input type="text" placeholder="body" onChange={(e)=>{
         setBody(e.target.value)
       }} />
-      <button >add</button>
+      <button onClick = {()=>{
+        setPost([...post,{userId  , id , title, body}])
+      }}>add</button>
 
 
     </>
